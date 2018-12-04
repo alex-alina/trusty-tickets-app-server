@@ -2,7 +2,6 @@ import { IsString } from 'class-validator'
 import { JsonController, Post, Body, BadRequestError } from 'routing-controllers'
 import { sign } from '../jwt'
 import User from '../users/entity'
-//chante AuthenticatePayload to AuthenticateUser
 
 class AuthenticatePayload {
   @IsString()

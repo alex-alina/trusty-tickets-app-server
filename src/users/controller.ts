@@ -1,4 +1,4 @@
-import { JsonController, Post, Param, Get, Body, Authorized } from 'routing-controllers'
+import { JsonController, Post, Param, Get, Body, BodyParam, Authorized, BadRequestError } from 'routing-controllers'
 import User from './entity';
 
 
@@ -7,10 +7,11 @@ export default class UserController {
 
   @Post('/users')
   async signup(
-    @Body() newUserdata: User
+    @Body() newUserdata: User,
+    @BodyParam("confirmPassword") password_confirmation: string
   ) {
-    //compare password with confirm_password
     const { password, ...rest } = newUserdata
+    if (password !== password_confirmation) throw new BadRequestError('Passwords do not match')
     const entity = User.create(rest)
     await entity.setPassword(password)
 
@@ -19,17 +20,17 @@ export default class UserController {
     return user
   }
 
-  @Authorized()
-  @Get('/users/:id([0-9]+)')
-  getUser(
-    @Param('id') id: number
-  ) {
-    return User.findOne(id)
-  }
+  // @Authorized()
+  // @Get('/users/:id([0-9]+)')
+  // getUser(
+  //   @Param('id') id: number
+  // ) {
+  //   return User.findOne(id)
+  // }
 
-  @Authorized()
-  @Get('/users')
-  getAllUsers() {
-    return User.find()
-  }
+  // @Authorized()
+  // @Get('/users')
+  // getAllUsers() {
+  //   return User.find()
+  // }
 }
