@@ -2,10 +2,10 @@ import 'reflect-metadata'
 import { Action, BadRequestError, createKoaServer } from "routing-controllers"
 import setupDb from './db'
 import UserController from './users/controller';
-
 import { verify } from './jwt'
 import User from './users/entity'
 import LoginController from './logins/controller';
+import SocialEventController from './events/controller';
 
 const port = process.env.PORT || 4000
 
@@ -14,6 +14,7 @@ const app = createKoaServer({
   controllers: [
     UserController,
     LoginController,
+    SocialEventController,
   ],
   //
   authorizationChecker: (action: Action) => {
