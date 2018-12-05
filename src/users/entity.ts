@@ -2,7 +2,7 @@ import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToMany } from 't
 import { Exclude } from 'class-transformer';
 import { MinLength, IsString, IsEmail } from 'class-validator';
 import * as bcrypt from 'bcrypt';
-import { SocialEvent } from '../events/entities';
+import { SocialEvent, Ticket, MyComment } from '../events/entities';
 
 @Entity()
 export default class User extends BaseEntity {
@@ -42,6 +42,12 @@ export default class User extends BaseEntity {
     return bcrypt.compare(rawPassword, this.password)
   }
 
-  @OneToMany(() => SocialEvent, socialEvent => socialEvent.user) 
+  @OneToMany(() => SocialEvent, socialEvent => socialEvent.user, {eager:true}) 
   socialEvents: SocialEvent[]
+
+  @OneToMany(() => Ticket, ticket => ticket.user, {eager:true}) 
+  tickets: Ticket[]
+
+  @OneToMany(() => MyComment, myComment => myComment.user, {eager:true}) 
+  myComments: MyComment[]
 }

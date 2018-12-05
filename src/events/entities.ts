@@ -1,5 +1,5 @@
-import { BaseEntity, PrimaryGeneratedColumn, Column, Entity,/* OneToMany,*/ ManyToOne } from 'typeorm'
-import { Length, MaxLength, IsString } from 'class-validator';
+import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, OneToMany, ManyToOne } from 'typeorm'
+import { Length, MaxLength, IsString,  } from 'class-validator';
 import User from '../users/entity'
 
 @Entity()
@@ -29,14 +29,63 @@ export class SocialEvent extends BaseEntity {
   //end date
   @Column('date')
   endDate: Date
-
-
-
-  // this is a relation, read more about them here:
-  // http://typeorm.io/#/many-to-one-one-to-many-relations
+ 
   @ManyToOne(() => User, user => user.socialEvents)
   user: User
 
-  // @OneToMany(() => Ticket, ticket => ticket.socialEvent) 
-  // tickets: Ticket[]
+  @OneToMany(() => Ticket, ticket => ticket.socialEventId, {eager:true}) 
+  tickets: Ticket[]
+
+}
+
+
+@Entity()
+export class Ticket extends BaseEntity {
+
+  @PrimaryGeneratedColumn()
+  id?: number
+
+  @Column('integer')
+  price: number
+
+  @IsString()
+  @MaxLength(50)
+  @Column('text')
+  description: string
+
+  @Column('text',{ nullable: true })
+  picture?: 'string'
+  
+  //hour when added
+  @Column('time')
+  createdAt: Date
+
+  @ManyToOne(() => User, user => user.tickets)
+  user: User
+
+  @ManyToOne(() => SocialEvent, socialEvent => socialEvent.tickets)
+  socialEventId: SocialEvent['id']
+
+  @OneToMany(() => MyComment, myComment => myComment.ticketId, {eager:true}) 
+  myComments: MyComment[]
+}
+
+@Entity()
+export class MyComment extends BaseEntity {
+
+  @PrimaryGeneratedColumn()
+  id?: number
+
+  @IsString()
+  @MaxLength(180)
+  @Column('text')
+  text: string
+
+
+  @ManyToOne(() => User, user => user.myComments)
+  user: User
+
+  @ManyToOne(() => Ticket, ticket => ticket.myComments)
+  ticketId: Ticket['id']
+
 }
