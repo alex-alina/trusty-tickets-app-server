@@ -24,9 +24,6 @@ export default class User extends BaseEntity {
   @Column('text')
   email: string
 
-  // Now password property will be excluded only during classToPlain operation.
-  //=>this method transforms your class object back to plain javascript object, 
-  //that can be JSON.stringify later.
   @IsString()
   @MinLength(4)
   @Column('text')

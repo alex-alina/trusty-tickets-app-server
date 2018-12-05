@@ -18,15 +18,12 @@ export class SocialEvent extends BaseEntity {
   @Column('text')
   description: string
 
-  //picture
   @Column('text')
   picture: string
 
-  //start date
   @Column('date')
   startDate: Date
 
-  //end date
   @Column('date')
   endDate: Date
  
@@ -56,7 +53,6 @@ export class Ticket extends BaseEntity {
   @Column('text',{ nullable: true })
   picture?: 'string'
   
-  //hour when added
   @Column('time')
   createdAt: Date
 
@@ -66,7 +62,7 @@ export class Ticket extends BaseEntity {
   @ManyToOne(() => SocialEvent, socialEvent => socialEvent.tickets)
   socialEvent: SocialEvent
 
-  @OneToMany(() => MyComment, myComment => myComment.ticketId, {eager:true}) 
+  @OneToMany(() => MyComment, myComment => myComment.ticket, {eager:true}) 
   myComments: MyComment[]
 }
 
@@ -86,6 +82,6 @@ export class MyComment extends BaseEntity {
   user: User
 
   @ManyToOne(() => Ticket, ticket => ticket.myComments)
-  ticketId: Ticket['id']
+  ticket: Ticket
 
 }

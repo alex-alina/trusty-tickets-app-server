@@ -1,6 +1,5 @@
 import { Ticket } from './entities';
 
-
 export const numOfUserTickets = (ticket: Ticket) => {
   return ticket.user.tickets.length
 }
@@ -17,7 +16,16 @@ export const compareTicketPriceWithAvg = (ticket: Ticket) => {
   return compareTicketWthAvg
 }
 
+export const hourOfTickedCreation = (ticket: Ticket) => {
+  const time = ticket.createdAt
+  const splitTime = time.toString().split(':')
+  const hour = splitTime[0]
+  return parseInt(hour)
+}
 
+export const numberOfComments = (ticket: Ticket) => {
+  return ticket.myComments.length
+}
 
 export const calculateRisk = (ticket: Ticket) => {
 
@@ -27,12 +35,35 @@ export const calculateRisk = (ticket: Ticket) => {
     risk += 10
   }
 
-  if(compareTicketPriceWithAvg(ticket) > 25) {
+  if (compareTicketPriceWithAvg(ticket) > 0) {
+    risk += compareTicketPriceWithAvg(ticket)
+  }
+
+  if (compareTicketPriceWithAvg(ticket) < 0 && compareTicketPriceWithAvg(ticket) >= -10) {
+    risk += compareTicketPriceWithAvg(ticket)
+  }
+
+  if (compareTicketPriceWithAvg(ticket) < -10) {
+    risk -= 10
+  }
+
+  if (hourOfTickedCreation(ticket) >= 9 && hourOfTickedCreation(ticket) < 17) {
+    risk -= 10
+  } else {
     risk += 10
   }
 
-  if(compareTicketPriceWithAvg(ticket) < -15) {
-    risk -= 5
+  if (numberOfComments(ticket) > 3) {
+    risk += 5
   }
-  return risk 
+
+  if (risk < 5) {
+    risk = 5
+  }
+
+  if (risk > 95) {
+    risk = 95
+  }
+
+  return risk
 }

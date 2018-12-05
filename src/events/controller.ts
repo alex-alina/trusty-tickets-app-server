@@ -29,6 +29,7 @@ export default class SocialEventController {
   async getAllEvents() {
     return { events: await SocialEvent.find({ relations: ["user"] }) }
   }
+  
   //add patch for event
 
   @Authorized()
@@ -45,6 +46,7 @@ export default class SocialEventController {
     ticket.socialEvent = socialEvent
     const  time = new Date()
     ticket.createdAt = time
+    
     return ticket.save()
   }
 
@@ -52,13 +54,10 @@ export default class SocialEventController {
   async getTicket(
     @Param('ticketId') id: number
   ) {
-   //add logic for risk calc
     const ticket = await Ticket.findOne(id, { relations: ["user", "socialEvent"] })
     if(!ticket) throw new BadRequestError(`Ticket does not exist`)
-
     const risk = calculateRisk(ticket)
     ticket['risk'] = risk
-
     return ticket
   }
 
@@ -79,8 +78,9 @@ export default class SocialEventController {
     @CurrentUser() user: User
   ) {
     comment.user = user
-    comment.ticketId = ticketId
-   
+    const ticket = await Ticket.findOne(ticketId)
+    if(!ticket) throw new BadRequestError(`Ticket does not exist`)
+    comment.ticket = ticket
     return comment.save()
   }
 
@@ -97,5 +97,6 @@ export default class SocialEventController {
     return { comments: await MyComment.find({ relations: ["user", "ticketId"] }) }
   }
 
+  //add patch for comments
 }
 
