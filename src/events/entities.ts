@@ -33,7 +33,7 @@ export class SocialEvent extends BaseEntity {
   @ManyToOne(() => User, user => user.socialEvents)
   user: User
 
-  @OneToMany(() => Ticket, ticket => ticket.socialEventId, {eager:true}) 
+  @OneToMany(() => Ticket, ticket => ticket.socialEvent, {eager:true}) 
   tickets: Ticket[]
 
 }
@@ -64,7 +64,7 @@ export class Ticket extends BaseEntity {
   user: User
 
   @ManyToOne(() => SocialEvent, socialEvent => socialEvent.tickets)
-  socialEventId: SocialEvent['id']
+  socialEvent: SocialEvent
 
   @OneToMany(() => MyComment, myComment => myComment.ticketId, {eager:true}) 
   myComments: MyComment[]

@@ -1,6 +1,7 @@
-import { JsonController, Post, Param, Get, Authorized, HttpCode, Body, CurrentUser } from 'routing-controllers'
+import { JsonController, Post, Param, Get, Authorized, HttpCode, Body, CurrentUser, BadRequestError } from 'routing-controllers'
 import { SocialEvent, Ticket, MyComment } from './entities';
 import User from '../users/entity';
+import { calculateRisk } from './logic'
 
 
 @JsonController()
@@ -39,17 +40,26 @@ export default class SocialEventController {
     @CurrentUser() user: User
   ) {
     ticket.user = user
-    ticket.socialEventId = eventId
+    const socialEvent = await SocialEvent.findOne(eventId)
+    if(!socialEvent) throw new BadRequestError(`Event does not exist`)
+    ticket.socialEvent = socialEvent
     const  time = new Date()
     ticket.createdAt = time
     return ticket.save()
   }
 
-  @Get('/events/:eventId([0-9]+)/tickets/:ticketId')
+  @Get('/events/:eventId([0-9]+)/tickets/:ticketId([0-9]+)')
   async getTicket(
     @Param('ticketId') id: number
   ) {
-    return await Ticket.findOne(id, { relations: ["user", "socialEventId"] })
+   //add logic for risk calc
+    const ticket = await Ticket.findOne(id, { relations: ["user", "socialEvent"] })
+    if(!ticket) throw new BadRequestError(`Ticket does not exist`)
+
+    const risk = calculateRisk(ticket)
+    ticket['risk'] = risk
+
+    return ticket
   }
 
 
@@ -59,6 +69,7 @@ export default class SocialEventController {
   }
 
   //add patch for tickets
+
   @Authorized()
   @Post('/events/:eventId([0-9]+)/tickets/:ticketId([0-9]+)/comments')
   @HttpCode(201)
@@ -71,6 +82,19 @@ export default class SocialEventController {
     comment.ticketId = ticketId
    
     return comment.save()
+  }
+
+  @Get('/events/:eventId([0-9]+)/tickets/:ticketId([0-9]+)/comments/:commentId([0-9]+)')
+  async getComment(
+    @Param('commentId') id: number
+  ) {
+    return await MyComment.findOne(id, { relations: ["user", "ticketId"] })
+  }
+
+
+  @Get('/events/:eventId([0-9]+)/tickets/:ticketId([0-9]+)/comments')
+  async getAllComments() {
+    return { comments: await MyComment.find({ relations: ["user", "ticketId"] }) }
   }
 
 }
