@@ -77,7 +77,6 @@ export class MyComment extends BaseEntity {
   @Column('text')
   text: string
 
-
   @ManyToOne(() => User, user => user.myComments)
   user: User
 

@@ -1,4 +1,4 @@
-import { JsonController, Post, /*Param, Get,*/ Body, BodyParam, /*Authorized,*/ BadRequestError } from 'routing-controllers'
+import { JsonController, Post, Body, BodyParam, BadRequestError } from 'routing-controllers'
 import User from './entity';
 
 
@@ -19,7 +19,7 @@ export default class UserController {
 
     return user
   }
-
+  //for admin implementation:
   // @Authorized()
   // @Get('/users/:id([0-9]+)')
   // getUser(

@@ -23,7 +23,7 @@ const app = createKoaServer({
       const [, token] = header.split(' ')
 
       try {
-        return !!(token && verify(token)) //{ id: number}
+        return !!(token && verify(token)) 
       }
       catch (e) {
         throw new BadRequestError(e)

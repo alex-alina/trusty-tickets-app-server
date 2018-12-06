@@ -63,8 +63,12 @@ export default class SocialEventController {
 
 
   @Get('/events/:eventId([0-9]+)/tickets')
-  async getAllTickets() {
-    return { tickets: await Ticket.find({ relations: ["user", "socialEventId"] }) }
+  async getAllTickets(
+    @Param('eventId') eventId: number,
+  ) {
+    const event = await SocialEvent.findOne(eventId)
+    if(!event) throw new BadRequestError(`Event does not exist`)
+    return  await Ticket.find({ relations: ["user", "socialEvent"] })
   }
 
   //add patch for tickets
@@ -88,13 +92,13 @@ export default class SocialEventController {
   async getComment(
     @Param('commentId') id: number
   ) {
-    return await MyComment.findOne(id, { relations: ["user", "ticketId"] })
+    return await MyComment.findOne(id, { relations: ["user", "ticket"] })
   }
 
 
   @Get('/events/:eventId([0-9]+)/tickets/:ticketId([0-9]+)/comments')
   async getAllComments() {
-    return { comments: await MyComment.find({ relations: ["user", "ticketId"] }) }
+    return { comments: await MyComment.find({ relations: ["user", "ticket"] }) }
   }
 
   //add patch for comments
