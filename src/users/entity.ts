@@ -1,8 +1,8 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column /*OneToMany*/ } from 'typeorm'
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm'
 import { Exclude } from 'class-transformer';
 import { MinLength, IsString, IsEmail } from 'class-validator';
 import * as bcrypt from 'bcrypt';
-// import { SocialEvent } from '../events/entities';
+import { SocialEvent, Ticket, MyComment } from '../events/entities';
 
 @Entity()
 export default class User extends BaseEntity {
@@ -24,9 +24,6 @@ export default class User extends BaseEntity {
   @Column('text')
   email: string
 
-  // Now password property will be excluded only during classToPlain operation.
-  //=>this method transforms your class object back to plain javascript object, 
-  //that can be JSON.stringify later.
   @IsString()
   @MinLength(4)
   @Column('text')
@@ -42,6 +39,12 @@ export default class User extends BaseEntity {
     return bcrypt.compare(rawPassword, this.password)
   }
 
-  // @OneToMany(() => SocialEvent, socialEvent => socialEvent.user) 
-  // socialEvents: SocialEvent[]
+  @OneToMany(() => SocialEvent, socialEvent => socialEvent.user, {eager:true}) 
+  socialEvents: SocialEvent[]
+
+  @OneToMany(() => Ticket, ticket => ticket.user, {eager:true}) 
+  tickets: Ticket[]
+
+  @OneToMany(() => MyComment, myComment => myComment.user, {eager:true}) 
+  myComments: MyComment[]
 }
