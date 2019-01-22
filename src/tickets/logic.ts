@@ -1,4 +1,4 @@
-import { Ticket } from './entities';
+import Ticket from './entity';
 
 export const numOfUserTickets = (ticket: Ticket) => {
   return ticket.user.tickets.length
@@ -24,7 +24,7 @@ export const hourOfTickedCreation = (ticket: Ticket) => {
 }
 
 export const numberOfComments = (ticket: Ticket) => {
-  return ticket.myComments.length
+  return ticket.comments.length
 }
 
 export const calculateRisk = (ticket: Ticket) => {

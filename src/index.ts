@@ -6,6 +6,8 @@ import { verify } from './jwt'
 import User from './users/entity'
 import LoginController from './logins/controller';
 import SocialEventController from './events/controller';
+import TicketController from './tickets/controller';
+import CommentController from './comments/controller';
 
 const port = process.env.PORT || 4000
 
@@ -15,6 +17,8 @@ const app = createKoaServer({
     UserController,
     LoginController,
     SocialEventController,
+    TicketController,
+    CommentController,
   ],
   //
   authorizationChecker: (action: Action) => {
@@ -23,7 +27,7 @@ const app = createKoaServer({
       const [, token] = header.split(' ')
 
       try {
-        return !!(token && verify(token)) 
+        return !!(token && verify(token))
       }
       catch (e) {
         throw new BadRequestError(e)
@@ -54,4 +58,3 @@ setupDb()
     app.listen(port, () => console.log(`Listening on port ${port}`))
   )
   .catch(err => console.error(err))
-
