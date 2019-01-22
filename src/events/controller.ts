@@ -1,6 +1,7 @@
 import { JsonController, Post, Param, Get, Authorized, HttpCode, Body, CurrentUser } from 'routing-controllers'
 import User from '../users/entity';
 import SocialEvent from './entity';
+// import Ticket from '../tickets/entity'
 
 
 @JsonController()
@@ -21,12 +22,12 @@ export default class SocialEventController {
   async getEvent(
     @Param('id') id: number
   ) {
-    return await SocialEvent.findOne(id, { relations: ["user"] })
+    return await SocialEvent.findOne(id, { relations: ["user", "tickets"] })
   }
 
   @Get('/events')
   async getAllEvents() {
-    return { events: await SocialEvent.find({ relations: ["user"] }) }
+    return { events: await SocialEvent.find({ relations: ["user", "tickets"] }) }
   }
 
   //add patch for event
