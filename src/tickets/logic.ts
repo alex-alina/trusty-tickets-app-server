@@ -1,10 +1,10 @@
 import Ticket from './entity';
 
-export const numOfUserTickets = (ticket: Ticket) => {
+const numOfUserTickets = (ticket: Ticket) => {
   return ticket.user.tickets.length
 }
 
-export const compareTicketPriceWithAvg = (ticket: Ticket) => {
+const compareTicketPriceWithAvg = (ticket: Ticket) => {
   const sumTickets = ticket.socialEvent.tickets.reduce((sum, ticket) => {
     return sum + ticket.price
   }, 0)
@@ -16,14 +16,14 @@ export const compareTicketPriceWithAvg = (ticket: Ticket) => {
   return compareTicketWthAvg
 }
 
-export const hourOfTickedCreation = (ticket: Ticket) => {
+const hourOfTickedCreation = (ticket: Ticket) => {
   const time = ticket.createdAt
   const splitTime = time.toString().split(':')
   const hour = splitTime[0]
   return parseInt(hour)
 }
 
-export const numberOfComments = (ticket: Ticket) => {
+const numberOfComments = (ticket: Ticket) => {
   return ticket.comments.length
 }
 

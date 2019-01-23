@@ -33,7 +33,6 @@ export default class SocialEvent extends BaseEntity {
 
   @OneToMany(() => Ticket, ticket => ticket.socialEvent) 
   tickets: Ticket[]
-
 }
 
 
