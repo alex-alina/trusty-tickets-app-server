@@ -35,19 +35,22 @@ export const calculateRisk = (ticket: Ticket) => {
     risk += 10
   }
 
-  if (compareTicketPriceWithAvg(ticket) > 0) {
-    risk += compareTicketPriceWithAvg(ticket)
+  const ticketPriceVsAvg = compareTicketPriceWithAvg(ticket)
+  // ticket is cheaper than average => add to risk
+  if (ticketPriceVsAvg > 0) {
+    risk += ticketPriceVsAvg
   }
-
-  if (compareTicketPriceWithAvg(ticket) < 0 && compareTicketPriceWithAvg(ticket) >= -10) {
-    risk += compareTicketPriceWithAvg(ticket)
+  //ticket is more expensive than average => subtract from risk (add because ticketPriveVsAvg is negative)
+  if (ticketPriceVsAvg < 0 && ticketPriceVsAvg >= -10) {
+    risk += ticketPriceVsAvg
   }
-
-  if (compareTicketPriceWithAvg(ticket) < -10) {
+  //ticket is more expensive than average, but you can't subtract more than 10% from the risc 
+  if (ticketPriceVsAvg < -10) {
     risk -= 10
   }
 
-  if (hourOfTickedCreation(ticket) >= 9 && hourOfTickedCreation(ticket) < 17) {
+  const ticketCreatedAt = hourOfTickedCreation(ticket)
+  if (ticketCreatedAt >= 9 && ticketCreatedAt < 17) {
     risk -= 10
   } else {
     risk += 10

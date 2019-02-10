@@ -33,11 +33,15 @@ export default class TicketController {
     const event = await SocialEvent.findOne(params.eventId)
     if (!event) throw new BadRequestError(`Event does not exist`)
 
+    //load ticket with all necessary relations to calculate the risk
     const ticketRiskData = await Ticket.findOne(params.ticketId, { relations: ["user", "user.tickets", "socialEvent", "socialEvent.tickets","comments"] })
     if (!ticketRiskData) throw new BadRequestError(`Ticket does not exist`)
+   
+    //check if event id is the id of the event the ticked was created for => before calculating ticket's risk
     if(ticketRiskData.socialEvent.id !== parseInt(params.eventId)) throw new BadRequestError('Ticket does not exist for this event')
     const risk = calculateRisk(ticketRiskData)
-
+   
+    //load ticket with less relations and add the calculated risk 
     const ticket = await Ticket.findOne(params.ticketId, { relations: ["user", "socialEvent", "comments"] })
     if (!ticket) throw new BadRequestError(`Ticket does not exist`)
     ticket['risk'] = risk
@@ -58,10 +62,3 @@ export default class TicketController {
   //add patch for tickets
 }
 
- // const allTickets = await Ticket.find({ 
-    //   relations: ["user", "socialEvent"],
-    //   where: { socialEvent: {id: eventId}}
-    // })
-    // if (!allTickets) throw new BadRequestError(`No tickets found`)
-
-    // return { tickets: allTickets.filter(ticket => ticket.socialEvent.id === eventId) }

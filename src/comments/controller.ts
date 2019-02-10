@@ -2,7 +2,6 @@ import { JsonController, Post, Get, Authorized, HttpCode, Body, CurrentUser, Bad
 import User from '../users/entity';
 import Comment from './entity';
 import Ticket from '../tickets/entity';
-// import SocialEvent from '../events/entity';
 
 const getTicket = async (eventId, ticketId) => {
   const ticket = await Ticket.findOne(ticketId, { relations: ["socialEvent"] })
