@@ -51,6 +51,7 @@ My goal is to finish this project as part of effective practice with building an
 
 **Practice goals:**
 * Refactoring code to improve security and querying efficiency.
+* Practise with building a RESTful API
 
 ## License
 MIT Licence - Copyright &copy; 2018 - Alina Rusu.
