@@ -48,7 +48,7 @@ A comment on a ticket has an author and some text.
 
 ## Motivation
 My goal is to finish this project as part of effective practice with building and deploying a full stack app.
-#####Practice goals:
+**Practice goals:**
 * Refactoring code to improve security and querying efficiency.
 
 ## License
