@@ -3,6 +3,7 @@
 This is the server for a ticketing app where customers can sell and buy tickets to events. 
 A fraud risk is calculated for each ticket and helps customers know which ones are safe to purchase.
 Current state is **WIP**.
+* The project was initially started in a private repository on Bitbucket, then added to this Github public repo, which makes the first part of the pull requests’ summary unavailable here.
 
 ## Tech stack
 * TypeScript
